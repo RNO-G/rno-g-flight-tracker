@@ -9,35 +9,33 @@ import astropy.time
 class FlightDataProvider:
     def __init__(self):
         self.__filename = None
-        self.__connection = None
-        self.__cursor = None
 
     def set_filename(self, filename):
         self.__filename = filename
 
     def get_flight_numbers(self):
-        self.__connection = sqlite3.connect(self.__filename)
-        self.__cursor = self.__connection.cursor()
-        self.__cursor.execute('SELECT flightnumber from aircraft')
-        flight_numbers = np.array(self.__cursor.fetchall())
+        connection = sqlite3.connect(self.__filename)
+        cursor = connection.cursor()
+        cursor.execute('SELECT flightnumber from aircraft')
+        flight_numbers = np.array(cursor.fetchall())
         return np.unique(flight_numbers)
 
     def get_hex_codes(self):
-        self.__connection = sqlite3.connect(self.__filename)
-        self.__cursor = self.__connection.cursor()
-        self.__cursor.execute('SELECT hexcode from aircraft')
-        hexcodes = np.array(self.__cursor.fetchall())
+        connection = sqlite3.connect(self.__filename)
+        cursor = connection.cursor()
+        cursor.execute('SELECT hexcode from aircraft')
+        hexcodes = np.array(cursor.fetchall())
         return np.unique(hexcodes)
 
     def get_flight_paths(self, hexcode=None, min_time=None, max_time=None):
-        self.__connection = sqlite3.connect(self.__filename)
-        self.__cursor = self.__connection.cursor()
+        connection = sqlite3.connect(self.__filename)
+        cursor = connection.cursor()
         if hexcode is None:
             command = 'SELECT latitude, longitude, readtime FROM aircraft WHERE latitude > - 999 and readtime > {} and readtime < {}'.format(min_time, max_time)
         else:
             command = 'SELECT latitude, longitude, readtime FROM aircraft WHERE hexcode = "%s" and latitude > - 999 and readtime > "%s" and readtime < "%s"' % (hexcode, min_time, max_time)
-        self.__cursor.execute(command)
-        res = self.__cursor.fetchall()
+        cursor.execute(command)
+        res = cursor.fetchall()
         return res
 
     def get_read_time_range(self):
