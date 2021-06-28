@@ -9,11 +9,12 @@ import plotly.graph_objs as go
 import astropy.time
 
 data_provider = rnog_flighttracker.get_flight_data.FlightDataProvider()
-
+plotlyconfig = {'topojsonURL': 'http://127.0.0.1:8080/assets/'}
 layout = html.Div([
     html.Button('Button', id='reload-everything'),
     dcc.Graph(
-        id='flight-map-plot'
+        id='flight-map-plot',
+        config=plotlyconfig
     )
 ])
 
