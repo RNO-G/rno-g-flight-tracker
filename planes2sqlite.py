@@ -12,6 +12,7 @@ import os
 LOCKFILE='planes2sqlite.lock'
 CURFILE='current.db'
 DEST='10.1.0.1:/data/flight-tracker'
+LIFETIME=24*3600 
 
 
 now = datetime.now()
@@ -55,10 +56,12 @@ current_time= 0
 print("Press Ctrl-C to stop\n")
 signal.signal(signal.SIGINT,signal_handler)
 signal.signal(signal.SIGTERM,signal_handler)
+signal.signal(signal.SIGUSR1,signal_handler)
 
 howmany=0
 
 last_printout = now.timestamp() 
+start_time = now.timestamp() 
 
 while True:
     f = open("/run/dump1090-mutability/aircraft.json");
@@ -91,9 +94,15 @@ while True:
         cur.execute("INSERT INTO aircraft(latitude, longitude, altitude, flightnumber, hexcode, readtime,rssi,seen,vertrate,speed,track) VALUES (?,?,?,?,?,?,?,?,?,?,?)", (lat,lon,alt,flight,hexcode,now,rssi,seen,vertrate,speed,track))
         howmany+=1
 
-    if (datetime.now().timestamp() - last_printout > 30): 
-        print("Recorded %d positions at in last 30 seconds" % (howmany))
+    whattimeisit = datetime.now().timestamp()
+
+    if (whattimeisit - last_printout > 30): 
+        print("Recorded %d positions in last 30 seconds" % (howmany))
         howmany=0
         last_printout=datetime.now().timestamp() 
     conn.commit() 
     time.sleep(3);
+    if  LIFETIME and whattimeisit-start_time > LIFETIME: 
+        signal_handler() 
+
+

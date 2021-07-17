@@ -1,0 +1,14 @@
+[Unit] 
+Description=Put plane track data into sqlite
+Wants=dump1090-mutability.service
+
+[Service] 
+Restart=always
+User=rno-g
+WorkingDirectory=/home/rno-g/rno-g-flight-tracker
+ExecStart=/usr/bin/python3 /home/rno-g/rno-g-flight-tracker/planes2sqlite.py
+
+[Install] 
+WantedBy=multi-user.target
+
+
