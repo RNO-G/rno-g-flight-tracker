@@ -72,15 +72,13 @@ while True:
 
     for aircraft in j['aircraft']:
 
-        if not 'lat' in aircraft or not 'lon' in aircraft or not 'altitude' in aircraft:
-            continue
 
         hexcode = aircraft['hex'] if 'hex' in aircraft else "N/A"
         flight = aircraft['flight'] if 'flight' in aircraft else "N/A"
 
         lat = float(aircraft['lat']) if 'lat' in aircraft else -9999
         lon = float(aircraft['lon']) if 'lon' in aircraft else -9999
-        alt = float(aircraft['altitude']) if 'altitude' in aircraft else -9999
+        alt = ( -1 if aircraft['altitude'] == 'ground' else float(aircraft['altitude']))  if 'altitude' in aircraft else -9999
         track = float(aircraft['track']) if 'track' in aircraft else -9999
         speed = float(aircraft['speed']) if 'speed' in aircraft else -9999
         vertrate = float(aircraft['vert_rate']) if 'vert_rate' in aircraft else -9999
@@ -94,4 +92,5 @@ while True:
         print("Recorded %d positions at in last 30 seconds" % (howmany))
         howmany=0
         last_printout=datetime.now().timestamp() 
+    conn.commit() 
     time.sleep(3);
