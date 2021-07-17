@@ -11,6 +11,7 @@ import os
 
 LOCKFILE='planes2sqlite.lock'
 CURFILE='current.db'
+DEST='10.1.0.1:/data/flight-tracker'
 
 
 now = datetime.now()
@@ -28,6 +29,8 @@ if os.path.exists(CURFILE):
     name="%04d.%02d.%02d-%02d%02d%02d.db" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
     print("Moving %s to %s and gzipping" %(CURFILE, name))
     os.system("mv %s %s && gzip %s" %(CURFILE,name,name))
+    print("Copying %s.gz to %s" %(name, DEST))
+    os.system("rsync -avh %s.gz %s" %(name,DEST))
 
 #check if there is already an current.db
 
