@@ -7,6 +7,7 @@ Restart=always
 User=rno-g
 WorkingDirectory=/home/rno-g/rno-g-flight-tracker
 ExecStart=/usr/bin/python3 /home/rno-g/rno-g-flight-tracker/planes2sqlite.py
+ExecStop=kill -USR1 $MAINPID
 
 [Install] 
 WantedBy=multi-user.target

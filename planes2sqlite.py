@@ -96,13 +96,13 @@ while True:
 
     whattimeisit = datetime.now().timestamp()
 
-    if (whattimeisit - last_printout > 30): 
-        print("Recorded %d positions in last 30 seconds" % (howmany))
+    if (whattimeisit - last_printout > 300): 
+        print("Recorded %d positions in last 300 seconds" % (howmany))
         howmany=0
-        last_printout=datetime.now().timestamp() 
+        last_printout=whattimeisit
     conn.commit() 
     time.sleep(3);
     if  LIFETIME and whattimeisit-start_time > LIFETIME: 
-        signal_handler() 
+        signal_handler(None,None) 
 
 
