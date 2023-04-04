@@ -1,6 +1,5 @@
 from rnog_flighttracker.visualization.app import app
-import dash_html_components as html
-import dash
+from dash import html
 import argparse
 import rnog_flighttracker.visualization.flight_map
 import rnog_flighttracker.get_flight_data

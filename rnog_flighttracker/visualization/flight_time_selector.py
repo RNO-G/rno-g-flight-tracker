@@ -1,11 +1,9 @@
 import numpy as np
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import rnog_flighttracker.get_flight_data
 from rnog_flighttracker.visualization.app import app
-from NuRadioReco.utilities import units
-import plotly.graph_objs as go
+
 import astropy.time
 
 data_provider = rnog_flighttracker.get_flight_data.FlightDataProvider()
