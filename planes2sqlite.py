@@ -49,7 +49,7 @@ def signal_handler(a,b):
 
 cur = conn.cursor()
 
-cur.execute("CREATE TABLE aircraft (id int primary key, latitude real, longitude real, altitude real, seen real, rssi real, flightnumber varchar, hexcode varchar, track real, speed real, vertrate real, readtime datetime default current_timestamp);")
+cur.execute("CREATE TABLE aircraft (id int primary key, latitude real, longitude real, altitude real, seen real, seen_pos real, rssi real, flightnumber varchar, hexcode varchar, track real, speed real, vertrate real, readtime datetime default current_timestamp);")
 
 
 current_time= 0
@@ -90,8 +90,10 @@ while True:
         vertrate = float(aircraft['vert_rate']) if 'vert_rate' in aircraft else -9999
         rssi = float(aircraft['rssi'])
         seen = float(aircraft['seen'])
+        seen_pos = float(aircraft['seen_pos'])
 
-        cur.execute("INSERT INTO aircraft(latitude, longitude, altitude, flightnumber, hexcode, readtime,rssi,seen,vertrate,speed,track) VALUES (?,?,?,?,?,?,?,?,?,?,?)", (lat,lon,alt,flight,hexcode,now,rssi,seen,vertrate,speed,track))
+
+        cur.execute("INSERT INTO aircraft(latitude, longitude, altitude, flightnumber, hexcode, readtime,rssi,seen,seen_pos,vertrate,speed,track) VALUES (?,?,?,?,?,?,?,?,?,?,?)", (lat,lon,alt,flight,hexcode,now,rssi,seen,seen_pos,vertrate,speed,track))
         howmany+=1
 
     whattimeisit = datetime.now().timestamp()
